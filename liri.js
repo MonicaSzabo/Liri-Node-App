@@ -19,7 +19,6 @@ switch(action) {
 		break;
 }
 
-
 function analyzeFile() {
 	fs.readFile("random.txt", "utf8", function(error, data) {
 		
@@ -55,10 +54,14 @@ function getTwitter() {
 	  if (!error) {
 	  	console.log("Here are my last 20 Tweets:");
 	  	console.log("");
+	  	fs.appendFile("log.txt", "Here are my last 20 Tweets:", function(err) {if(err) throw err;});
+
 	  	for(var i = 0; i < 20; i++) {
 	  		console.log(tweets[i].text);
 	  		console.log("Created At: " + tweets[i].created_at);
 	  		console.log("");
+
+	  		fs.appendFile("log.txt", tweets[i].text + " Created At: " + tweets[i].created_at, function(err) {if(err) throw err;});
 	  	}
 	  } else {
 	  	console.log(error);
@@ -95,6 +98,10 @@ function getSpotify() {
 	 	console.log("Artist: " + data.tracks.items[0].artists[0].name);
 	 	console.log("Album: " + data.tracks.items[0].album.name);
 	 	console.log("Preview Link: " + data.tracks.items[0].preview_url);
+
+	 	fs.appendFile("log.txt", " Song Name: " + data.tracks.items[0].name + " Artist: " +
+	 		data.tracks.items[0].artists[0].name + " Album: " + data.tracks.items[0].album.name +
+	 		" Preview Link: " + data.tracks.items[0].preview_url, function(err) {if(err) throw err;});
 	});
 }
 
@@ -129,6 +136,12 @@ function getMovie() {
 			console.log("Actors: " + JSON.parse(body)["Actors"]);
 			console.log("Rotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"]);
 			console.log("Rotten Tomatoes URL: " + JSON.parse(body)["tomatoURL"]);
+
+			fs.appendFile("log.txt", " Title: " + JSON.parse(body)["Title"] + " Year: " + JSON.parse(body)["Year"] +
+				" IMDB Rating: " + JSON.parse(body)["imdbRating"] + " Country: " + JSON.parse(body)["Country"] +
+				" Language: " + JSON.parse(body)["Language"] + " Plot: " + JSON.parse(body)["Plot"] +
+				" Actors: " + JSON.parse(body)["Actors"] + " Rotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"] +
+				" Rotten Tomatoes URL: " + JSON.parse(body)["tomatoURL"], function(err) {if(err) throw err;});
 		} else {
 			console.log(error);
 		}
