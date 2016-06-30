@@ -1,6 +1,8 @@
 var keys = require('./keys.js');
+var fs = require('fs');
 
 var action = process.argv[2];
+var mediaQuery;		//Holds either the movie name or the song name in the random.txt file
 
 switch(action) {
 	case "my-tweets":
@@ -13,8 +15,34 @@ switch(action) {
 		getMovie();
 		break;
 	case "do-what-it-says":
-		console.log("this is where the do what it says part goes")
+		analyzeFile();
 		break;
+}
+
+
+function analyzeFile() {
+	fs.readFile("random.txt", "utf8", function(error, data) {
+		
+		var dataArr = data.split(",");
+
+		action = dataArr[0];
+
+		if(dataArr.length > 1) {
+			mediaQuery = dataArr[1];
+		}
+
+		switch(action) {
+			case "my-tweets":
+				getTwitter();
+				break;
+			case "spotify-this-song":
+				getSpotify();
+				break;
+			case "movie-this":
+				getMovie();
+				break;
+		}
+	});
 }
 
 function getTwitter() {
@@ -40,13 +68,16 @@ function getTwitter() {
 
 function getSpotify() {
 	var spotify = require('spotify');
+	var song = mediaQuery;
+	
+	if(song == null) {
+		song = process.argv[3];
 
-	var song = process.argv[3];
-
-	for(var i = 4; i < process.argv.length; i++) {
-		song = song + " " + process.argv[i];
+		for(var i = 4; i < process.argv.length; i++) {
+			song = song + " " + process.argv[i];
+		}
 	}
-
+	
 	if(song == null) {
 		console.log("You didn't input a song so we are defaulting to What's My Age Again by Blink 182");
 		song = "What's My Age Again";
@@ -69,10 +100,14 @@ function getSpotify() {
 
 function getMovie() {
 	var request = require('request');
-	var movie = process.argv[3];
+	var movie = mediaQuery;
 
-	for(var i = 4; i < process.argv.length; i++) {
-		movie = movie + " " + process.argv[i];
+	if(movie == null) {
+		movie = process.argv[3];
+
+		for(var i = 4; i < process.argv.length; i++) {
+			movie = movie + " " + process.argv[i];
+		}
 	}
 
 	if(movie == null) {
@@ -98,5 +133,4 @@ function getMovie() {
 			console.log(error);
 		}
 	})
-
 }
