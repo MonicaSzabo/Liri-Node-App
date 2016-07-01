@@ -4,6 +4,12 @@ var fs = require('fs');
 var action = process.argv[2];
 var mediaQuery;		//Holds either the movie name or the song name in the random.txt file
 
+var timeStamp = new Date();
+timeStamp = timeStamp.toDateString();
+
+fs.appendFile("log.txt", "\n\n=====================================================\nInquiry Made On " + timeStamp + "\n\n"
+	, function(err) {if(err) throw err;});
+
 switch(action) {
 	case "my-tweets":
 		getTwitter();
@@ -22,7 +28,7 @@ switch(action) {
 function analyzeFile() {
 	fs.readFile("random.txt", "utf8", function(error, data) {
 		
-		var dataArr = data.split(",");
+		var dataArr = data.split(", ");
 
 		action = dataArr[0];
 
@@ -54,14 +60,14 @@ function getTwitter() {
 	  if (!error) {
 	  	console.log("Here are my last 20 Tweets:");
 	  	console.log("");
-	  	fs.appendFile("log.txt", "Here are my last 20 Tweets:", function(err) {if(err) throw err;});
+	  	fs.appendFile("log.txt", "\nHere are my last 20 Tweets: \n ", function(err) {if(err) throw err;});
 
 	  	for(var i = 0; i < 20; i++) {
 	  		console.log(tweets[i].text);
 	  		console.log("Created At: " + tweets[i].created_at);
 	  		console.log("");
 
-	  		fs.appendFile("log.txt", tweets[i].text + " Created At: " + tweets[i].created_at, function(err) {if(err) throw err;});
+	  		fs.appendFile("log.txt", tweets[i].text + "\nCreated At: " + tweets[i].created_at + "\n \n", function(err) {if(err) throw err;});
 	  	}
 	  } else {
 	  	console.log(error);
@@ -99,9 +105,9 @@ function getSpotify() {
 	 	console.log("Album: " + data.tracks.items[0].album.name);
 	 	console.log("Preview Link: " + data.tracks.items[0].preview_url);
 
-	 	fs.appendFile("log.txt", " Song Name: " + data.tracks.items[0].name + " Artist: " +
-	 		data.tracks.items[0].artists[0].name + " Album: " + data.tracks.items[0].album.name +
-	 		" Preview Link: " + data.tracks.items[0].preview_url, function(err) {if(err) throw err;});
+	 	fs.appendFile("log.txt", "\nSong Name: " + data.tracks.items[0].name + "\nArtist: " +
+	 		data.tracks.items[0].artists[0].name + "\nAlbum: " + data.tracks.items[0].album.name +
+	 		"\nPreview Link: " + data.tracks.items[0].preview_url, function(err) {if(err) throw err;});
 	});
 }
 
@@ -137,11 +143,11 @@ function getMovie() {
 			console.log("Rotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"]);
 			console.log("Rotten Tomatoes URL: " + JSON.parse(body)["tomatoURL"]);
 
-			fs.appendFile("log.txt", " Title: " + JSON.parse(body)["Title"] + " Year: " + JSON.parse(body)["Year"] +
-				" IMDB Rating: " + JSON.parse(body)["imdbRating"] + " Country: " + JSON.parse(body)["Country"] +
-				" Language: " + JSON.parse(body)["Language"] + " Plot: " + JSON.parse(body)["Plot"] +
-				" Actors: " + JSON.parse(body)["Actors"] + " Rotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"] +
-				" Rotten Tomatoes URL: " + JSON.parse(body)["tomatoURL"], function(err) {if(err) throw err;});
+			fs.appendFile("log.txt", "\nTitle: " + JSON.parse(body)["Title"] + "\nYear: " + JSON.parse(body)["Year"] +
+				"\nIMDB Rating: " + JSON.parse(body)["imdbRating"] + "\nCountry: " + JSON.parse(body)["Country"] +
+				"\nLanguage: " + JSON.parse(body)["Language"] + "\nPlot: " + JSON.parse(body)["Plot"] +
+				"\nActors: " + JSON.parse(body)["Actors"] + "\nRotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"] +
+				"\nRotten Tomatoes URL: " + JSON.parse(body)["tomatoURL"], function(err) {if(err) throw err;});
 		} else {
 			console.log(error);
 		}
