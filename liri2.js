@@ -37,7 +37,7 @@ function useApp() {
 				  if (!error) {
 				  	console.log("Here are your last 20 Tweets:");
 				  	console.log("");
-				  	fs.appendFile("log2.txt", "\nHere are my last 20 Tweets: \n ", function(err) {if(err) throw err;});
+				  	fs.appendFile("log2.txt", "\nHere are the last 20 Tweets of " + user.username + ": \n ", function(err) {if(err) throw err;});
 
 				  	for(var i = 0; i < 20; i++) {
 				  		console.log(tweets[i].text);
