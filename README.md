@@ -1,7 +1,7 @@
 # Liri-Node-App
 Language Interpretation and Recognition Interface using Node
 
-### To utilize liri.js:
+### To utilize liri.js
 
 - node liri.js my-tweets
 	-  Pulls up moszabo's 20 most recent tweets
